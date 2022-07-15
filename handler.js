@@ -7,7 +7,7 @@ var lambdaHandler = function(event, context, callback) {
         timeout: event.context['my-timeout']
     };
 
-    // Set the default timeout to 50ms
+
     const timeout = typeof connData.timeout !== 'undefined' ?
                     parseInt(connData.timeout) :
                     50; // Fallback to 50ms
@@ -18,20 +18,20 @@ var lambdaHandler = function(event, context, callback) {
     const client = net.connect(connData, function() {
       message = 'Port ' + connData.port + ' on ' + connData.host + ' is open!';
 
-      // Return some values to the caller
+
       callback(null, message);
 
-      // We don't need it anymore
+
       client.destroy();
     });
 
     client.setTimeout(timeout, function() {
-        // Close it manually
+
         client.destroy(new Error(message), null);
     });
 
     client.on('error', function(err) {
-        // Return error to the caller
+
         callback(new Error(message), null);
     });
 };
